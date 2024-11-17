@@ -1,0 +1,230 @@
+# Commom references
+components:
+  schemas:
+    Users:
+      type: object
+      properties:
+        u_name:
+          type: string
+          description: User's full name
+        u_address:
+          type: string
+          description: User's address
+        u_phone:
+          type: string
+          description: User's phone number
+        u_email:
+          type: string
+          format: email
+          description: User's email address
+        u_password:
+          type: string
+          format: password
+          description: User's password
+
+    Products:
+      type: object
+      properties:
+        p_name:
+          type: string
+          description: Name of the book
+        p_author:
+          type: string
+          description: Author name
+        p_publish_date:
+          type: string
+          format: date
+          description: Publication date of the book
+        p_description:
+          type: string
+          description: Introduction to the book
+        p_category:
+          type: string
+          description: A list of categories for the book
+        p_price:
+          type: string
+          description: Price of the book
+        p_quantity:
+          type: string
+          description: Quantity of the book
+        p_image:
+          type: string
+          format: binary
+          description: Image of the book
+
+    Categories:
+      type: object
+      properties:
+        c_name:
+          type: string
+          description: Name of category
+        c_saying:
+          type: string
+          description: sayings belonging to each category
+        c_author_saying:
+          type: string
+          description: The author of each statement corresponds
+
+    Carts:
+      type: object
+      properties:
+        userId:
+          type: integer
+          description: Name of the user adding the product
+        productId:
+          type: integer
+          description: The ID of the product to add to the cart.
+        cart_quantity:
+          type: integer
+          description: The quantity of the product to add.
+
+    Orders:
+      type: object
+      properties:
+        userName:
+          type: string
+          description: Name of the user placing the order
+        o_total_price:
+          type: string
+          description: Total price of the order
+        o_date:
+          type: string
+          format: date
+          description: Date the order was placed
+        products:
+          type: array
+          items:
+            type: object
+            properties:
+              p_id:
+                type: integer
+                description: ID of the book
+              o_detail_quantity:
+                type: integer
+                description: Quantity of the book ordered
+              o_detail_price:
+                type: string
+                description: Price of the book ordered
+
+    OrderDetails:
+      type: object
+      properties:
+        p_id:
+          type: integer
+          description: ID of the product in the order
+        o_detail_quantity:
+          type: integer
+          description: Quantity of the product ordered
+        o_detail_price:
+          type: number
+          format: float
+          description: Price of the product at the time of order
+
+    PaginationMetadata:
+      type: object
+      properties:
+        totalRecords:
+          type: integer
+          default: 0
+          description: The total number of records
+        firstPage:
+          type: integer
+          default: 1
+          description: The first page
+        lastPage:
+          type: integer
+          default: 1
+          description: The last page
+        page:
+          type: integer
+          default: 1
+          description: The current page
+        limit:
+          type: integer
+          default: 5
+          description: The number of records per page
+
+  responses:
+    "200NoData":
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+                description: The response status
+                enum:
+                  - success
+              data:
+                type: object
+                nullable: true
+                default: null
+                description: The response data
+
+  parameters:
+    productIdParam:
+      name: p_id
+      description: Product ID
+      required: true
+      in: path
+      schema:
+        type: integer
+
+    userIdParam:
+      name: u_id
+      description: User ID
+      required: true
+      in: path
+      schema:
+        type: integer
+
+    categoryIdParam:
+      name: c_id
+      description: Category ID
+      required: true
+      in: path
+      schema:
+        type: integer
+
+    cartIdParam:
+      name: cart_id
+      description: Cart ID
+      required: true
+      in: path
+      schema:
+        type: integer
+
+    orderIdParam:
+      name: o_id
+      in: path
+      required: true
+      schema:
+        type: integer
+
+    limitParam:
+      name: limit
+      description: Number of records per page
+      in: query
+      schema:
+        type: integer
+        default: 5
+        minimum: 1
+        maximum: 100
+      required: false
+
+    pageParam:
+      name: page
+      description: Page number of records
+      in: query
+      schema:
+        type: integer
+        default: 1
+        minimum: 1
+      required: false
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
